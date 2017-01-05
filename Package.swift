@@ -5,7 +5,8 @@ let package = Package(
     dependencies: [
         .Package(
             url: "https://github.com/SwiftyJSON/SwiftyJSON.git",
-            majorVersion: 3
+            majorVersion: 3,
+            minor: 1
         ),
         .Package(
             url: "https://github.com/Thomvis/BrightFutures.git",
