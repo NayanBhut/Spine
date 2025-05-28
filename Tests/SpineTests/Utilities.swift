@@ -21,12 +21,7 @@ extension XCTestCase {
                     try Data(contentsOf: $0)
                 }
             )
-        } catch {
-          print("Don't find the path")
-        }
-        
-        print("\n\n\n\(data)\n\n\n\n")
-        
+        } catch { }
         let json = (try? JSON(data: data)) ?? JSON()
         return (data: data, json: json)
     }

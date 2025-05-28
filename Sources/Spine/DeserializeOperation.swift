@@ -194,9 +194,7 @@ class DeserializeOperation: Operation {
 	fileprivate func extractAttributes(from serializedData: JSON, intoResource resource: Resource) {
         for case let field as Attribute in resource.fields {
 			let key = keyFormatter.format(field)
-            print("Resource Name is \(resource.resourceType) => \(resource.id) =>\(key)")
-			if let extractedValue = extractAttribute(key, from: serializedData) {
-                print(" Resource Name is \(resource.resourceType) => \(resource.id) => \(key) => \(extractedValue)")
+            if let extractedValue = extractAttribute(key, from: serializedData) {
 				let formattedValue = valueFormatters.unformatValue(extractedValue, forAttribute: field)
 				resource.setValue(formattedValue, forField: field.name)
             }else {
