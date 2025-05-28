@@ -9,16 +9,17 @@
 import Foundation
 import XCTest
 import SwiftyJSON
+@testable import Spine
 
 class Foo: Resource {
-	var stringAttribute: String?
-	var integerAttribute: NSNumber?
-	var floatAttribute: NSNumber?
-	var booleanAttribute: NSNumber?
-	var nilAttribute: AnyObject?
-	var dateAttribute: Date?
-	var toOneAttribute: Bar?
-	var toManyAttribute: LinkedResourceCollection?
+    @objc dynamic var stringAttribute: String?
+    @objc dynamic var integerAttribute: NSNumber?
+    @objc dynamic var floatAttribute: NSNumber?
+    @objc dynamic var booleanAttribute: NSNumber?
+    @objc dynamic var nilAttribute: AnyObject?
+    @objc dynamic var dateAttribute: Date?
+    @objc dynamic var toOneAttribute: Bar?
+    @objc dynamic var toManyAttribute: LinkedResourceCollection?
 	
 	override class var resourceType: String {
 		return "foos"
@@ -52,8 +53,8 @@ class Foo: Resource {
 }
 
 class Bar: Resource {
-	var barStringAttribute: String?
-	var barIntegerAttribute: NSNumber?
+    @objc dynamic var barStringAttribute: String?
+    @objc dynamic var barIntegerAttribute: NSNumber?
 	
 	override class var resourceType: String {
 		return "bars"

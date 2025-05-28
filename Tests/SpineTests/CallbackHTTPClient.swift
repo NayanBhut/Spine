@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@testable import Spine
 
 open class CallbackHTTPClient: NetworkClient {
 	typealias HandlerFunction = (_ request: URLRequest, _ payload: Data?) -> (responseData: Data?, statusCode: Int?, error: NSError?)

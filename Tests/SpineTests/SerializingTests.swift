@@ -9,6 +9,7 @@
 import Foundation
 import XCTest
 import SwiftyJSON
+@testable import Spine
 
 class SerializerTests: XCTestCase {
 	let serializer = Serializer()
@@ -41,7 +42,7 @@ class SerializingTests: SerializerTests {
 	
 	func serializedJSONWithOptions(_ options: SerializationOptions) -> JSON {
 		let serializedData = try! serializer.serializeResources([foo], options: options)
-		return JSON(data: serializedData)
+		return (try? JSON(data: serializedData)) ?? JSON()
 	}
 	
 	func testSerializeSingleResourceAttributes() {
@@ -88,7 +89,13 @@ class SerializingTests: SerializerTests {
 	func testSerializeSingleResourceWithoutToManyRelationships() {
 		let options:SerializationOptions = [.IncludeID, .IncludeToOne]
 		let serializedData = try! serializer.serializeResources([foo], options: options)
-		let json = JSON(data: serializedData)
+        
+        var json: JSON!
+        do {
+            json = try JSON(data: serializedData)
+        } catch {
+            json = JSON()
+        }
 		
 		XCTAssertNotNil(json["data"]["relationships"]["to-many-attribute"].error, "Expected serialized to-many to be absent.")
 	}
@@ -96,7 +103,13 @@ class SerializingTests: SerializerTests {
     func testSerializeResourceOmittingNulls() {
         let options: SerializationOptions = [.OmitNullValues]
         let serializedData = try! serializer.serializeResources([foo], options: options)
-        let json = JSON(data: serializedData)
+        
+        var json: JSON!
+        do {
+            json = try JSON(data: serializedData)
+        } catch {
+            json = JSON()
+        }
         XCTAssertNotNil(json["data"]["attributes"]["nil-attribute"].error, "Expected serialized nil to be absent.")
     }
 }

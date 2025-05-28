@@ -9,6 +9,7 @@
 import XCTest
 import SwiftyJSON
 import BrightFutures
+@testable import Spine
 
 class SpineTests: XCTestCase {
 	var spine: Spine!
@@ -396,7 +397,14 @@ class SaveTests: SpineTests {
 		HTTPClient.handler = { request, payload in
 			XCTAssertEqual(request.httpMethod!, "POST", "HTTP method not as expected.")
 			XCTAssertEqual(request.url!, URL(string:"http://example.com/foos")!, "Request URL not as expected.")
-			let json = JSON(data: payload!)
+			
+            var json: JSON!
+            do {
+                json = try JSON(data: payload!)
+            } catch {
+                json = JSON()
+            }
+            
 			XCTAssertEqual(json["data"]["id"].stringValue, "some id")
 			return (responseData: self.fixture.data, statusCode: 201, error: nil)
 		}
@@ -444,7 +452,14 @@ class SaveTests: SpineTests {
 			XCTAssertEqual(request.httpMethod!, "PATCH", "HTTP method not as expected.")
 			if(request.url! == URL(string: "http://example.com/foos/1")!) {
 				resourcePatched = true
-				let json = JSON(data: payload!)
+                
+                var json: JSON!
+                do {
+                    json = try JSON(data: payload!)
+                } catch {
+                    json = JSON()
+                }
+                
 				XCTAssertEqual(json["data"]["id"].stringValue, self.foo.id)
 			}
 			return (responseData: self.fixture.data, statusCode: 201, error: nil)
@@ -513,8 +528,14 @@ class SaveRelationshipsTests: SpineTests {
 
 		HTTPClient.handler = { request, payload in
 			if(request.httpMethod! == "PATCH" && request.url!.absoluteString == "http://example.com/foos/1/relationships/to-one-attribute") {
-				let json = JSON(data: payload!)
-				if json["data"]["type"].string == "bars" && json["data"]["id"].string == "10" {
+                var json: JSON!
+                do {
+                    json = try JSON(data: payload!)
+                } catch {
+                    json = JSON()
+                }
+                
+                if json["data"]["type"].string == "bars" && json["data"]["id"].string == "10" {
 					relationshipUpdated = true
 				}
 			}
@@ -536,8 +557,14 @@ class SaveRelationshipsTests: SpineTests {
 		
 		HTTPClient.handler = { request, payload in
 			if(request.httpMethod! == "PATCH" && request.url!.absoluteString == "http://example.com/foos/1/relationships/to-one-attribute") {
-				let json = JSON(data: payload!)
-				if json["data"].type == .null {
+                var json: JSON!
+                do {
+                    json = try JSON(data: payload!)
+                } catch {
+                    json = JSON()
+                }
+                
+                if json["data"].type == .null {
 					relationshipUpdated = true
 				}
 			}
@@ -561,7 +588,7 @@ class SaveRelationshipsTests: SpineTests {
 
 		HTTPClient.handler = { request, payload in
 			if(request.httpMethod! == "POST" && request.url!.absoluteString == "http://example.com/foos/1/relationships/to-many-attribute") {
-				let data = JSON(data: payload!)["data"].arrayValue
+                let data = (try? JSON(data: payload!))?["data"].arrayValue ?? []
 				XCTAssertEqual(data.count, 1, "Expected data count to be 1.")
 
 				if data[0]["type"].string == "bars" && data[0]["id"].string == "13" {
@@ -589,7 +616,7 @@ class SaveRelationshipsTests: SpineTests {
 
 		HTTPClient.handler = { request, payload in
 			if(request.httpMethod! == "DELETE" && request.url!.absoluteString == "http://example.com/foos/1/relationships/to-many-attribute") {
-				let data = JSON(data: payload!)["data"].arrayValue
+				let data = (try? JSON(data: payload!))?["data"].arrayValue ?? []
 				XCTAssertEqual(data.count, 1, "Expected data count to be 1.")
 
 				if data[0]["type"].string == "bars" && data[0]["id"].string == "11" {

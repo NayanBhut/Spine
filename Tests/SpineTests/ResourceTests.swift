@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import Spine
 
 class ResourceTests: XCTestCase {
 	

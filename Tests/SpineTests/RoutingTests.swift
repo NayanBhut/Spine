@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import Spine
 
 class RoutingTests: XCTestCase {
 	let spine = Spine(baseURL: URL(string:"http://example.com")!)
@@ -28,7 +29,6 @@ class RoutingTests: XCTestCase {
 		
 		let url = spine.router.urlForQuery(query)
 		let expectedURL = URL(string: "http://example.com/foos?filter[id]=1,2&include=to-one-attribute,to-many-attribute&filter[string-attribute]=stringValue&fields[foos]=string-attribute,integer-attribute&fields[bars]=bar-string-attribute&sort=integer-attribute,-float-attribute")!
-		
 		XCTAssertEqual(url, expectedURL, "URL not as expected.")
 	}
     
